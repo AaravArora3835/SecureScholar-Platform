@@ -65,15 +65,15 @@ SecureScholar-Platform/
 ├── DEVLOG.md
 │
 ├── src/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── app.js
+│ ├── css/
+│ │ └── style.css
+│ └── js/
+│ └── app.js
 │
 └── Screenshots/
-    ├── 2025-10-17_SecureScholar_Landing.png
-    ├── 2025-10-17_Project_Folder_Tree.png
-    └── 2025-10-17_Browser_Console_OK.png
+├── 2025-10-17_SecureScholar_Landing.png
+├── 2025-10-17_Project_Folder_Tree.png
+└── 2025-10-17_Browser_Console_OK.png
 
 ---
 
@@ -107,6 +107,7 @@ Future entries will cover feature modules, UI improvements, and gamification.
 ## License
 
 **MIT License** — you’re free to learn from this code and adapt it for educational purposes.  
+
 
 
 
