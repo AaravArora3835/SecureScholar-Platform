@@ -83,9 +83,9 @@ SecureScholar-Platform/
 
 | Screenshot | Description |
 |-------------|--------------|
-| ![Landing Page](docs/screenshots/2025-10-17_SecureScholar_Landing.png) | Live landing page showcasing SecureScholar’s foundation. |
-| ![Folder Tree](docs/screenshots/2025-10-17_Project_Folder_Tree.png) | Local project structure showing organized folders. |
-| ![Console OK](docs/screenshots/2025-10-17_Browser_Console_OK.png) | Browser Console logs confirm successful JavaScript execution. |
+| ![Landing Page](screenshots/2025-10-17_SecureScholar_Landing.png) | Live landing page showcasing SecureScholar’s foundation. |
+| ![Folder Tree](screenshots/2025-10-17_Project_Folder_Tree.png) | Local project structure showing organized folders. |
+| ![Console OK](screenshots/2025-10-17_Browser_Console_OK.png) | Browser Console logs confirm successful JavaScript execution. |
 
 ---
 
@@ -109,4 +109,5 @@ Future entries will cover feature modules, UI improvements, and gamification.
 ## License
 
 **MIT License** — you’re free to learn from this code and adapt it for educational purposes.  
+
 
