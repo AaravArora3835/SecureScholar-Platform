@@ -12,7 +12,7 @@
 
 ---
 
-### ✅ Completed
+### Completed
 - Created full project structure (`/src`, `/Screenshots`, `/css`, `/js`)  
 - Added base HTML, CSS, and JS files  
 - Designed landing page using glassmorphism + grid layout  
@@ -22,7 +22,7 @@
 
 ---
 
-### 📁 Files Created
+### Files Created
 - `index.html` — main webpage  
 - `src/css/style.css` — layout & visual design  
 - `src/js/app.js` — base JavaScript functionality  
@@ -32,14 +32,14 @@
 
 ---
 
-### 🖼️ Screenshots
+### Screenshots
 1. `2025-10-17_SecureScholar_Landing.png`  
 2. `2025-10-17_Project_Folder_Tree.png`  
 3. `2025-10-17_Browser_Console_OK.png`
 
 ---
 
-### 🎨 Design Decisions
+### Design Decisions
 | Element | Choice | Reason |
 |----------|---------|--------|
 | **Color Scheme** | Violet → Purple gradient (`#667eea` → `#764ba2`) | Represents creativity + technology |
@@ -85,3 +85,4 @@ The project is small but sets a foundation for consistency, design skills, and h
 
 **Status:** Week 0 Complete  
 **Next Update:** Week 1 — Oct 27 2025
+
