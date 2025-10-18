@@ -57,23 +57,25 @@ This platform is developed publicly throughout Aarav’s **2025-2026 Cybersecuri
 
 ---
 
-##  Folder Structure
+## Folder Structure
 
-#SecureScholar-Platform/
-#├── index.html
-#├── README.md
-#├── DEVLOG.md
-#│
-#├── src/
-#│ ├── css/
-#│ │ └── style.css
-#│ └── js/
-#│ └── app.js
-#│
-#└── Screenshots/
-#├── 2025-10-17_SecureScholar_Landing.png
-#├── 2025-10-17_Project_Folder_Tree.png
-#└── 2025-10-17_Browser_Console_OK.png
+\`\`\`
+SecureScholar-Platform/
+├── index.html
+├── README.md
+├── DEVLOG.md
+│
+├── src/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── app.js
+│
+└── screenshots/
+    ├── 2025-10-17_SecureScholar_Landing.png
+    ├── 2025-10-17_Project_Folder_Tree.png
+    └── 2025-10-17_Browser_Console_OK.png
+\`\`\`
 
 ---
 
