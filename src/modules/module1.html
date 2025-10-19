@@ -3,182 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Module 1 — Password Security</title>
+  <title>Module 1 — Password Security | SecureScholar</title>
 
+  <!-- Favicon (module page is one folder deeper) -->
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <!-- Module styles + logic (same folder as this file) -->
   <link rel="stylesheet" href="./modules.css" />
   <script defer src="./modules.js"></script>
-
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #f5f7ff, #eef2ff);
-      color: #1f2937;
-      margin: 0;
-      padding: 2rem;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    h1, h2 {
-      text-align: center;
-      color: #1e3a8a;
-    }
-    .ring-wrap {
-      display: flex;
-      justify-content: center;
-      margin: 1.5rem 0;
-    }
-    .ring {
-      width: 100px;
-      height: 100px;
-    }
-    .ring .bg {
-      fill: none;
-      stroke: #e5e7eb;
-      stroke-width: 12;
-    }
-    .ring .fg {
-      fill: none;
-      stroke: #7B61FF;
-      stroke-width: 12;
-      stroke-linecap: round;
-      transform: rotate(-90deg);
-      transform-origin: 50% 50%;
-      stroke-dasharray: 327;
-      stroke-dashoffset: 327;
-      transition: stroke-dashoffset .5s ease;
-    }
-    .ring-text {
-      font-size: 20px;
-      fill: #1e3a8a;
-      dominant-baseline: middle;
-    }
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin: 1rem 0;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    }
-    .card h3 {
-      color: #1e3a8a;
-      margin-bottom: .5rem;
-    }
-    .creator-note {
-      margin-top: .8rem;
-      padding: .7rem 1rem;
-      border-left: 4px solid #7B61FF33;
-      background: #f8fbff;
-      border-radius: 10px;
-      font-size: .95rem;
-      font-style: italic;
-      line-height: 1.6;
-    }
-    .button {
-      border: none;
-      padding: 1rem 2rem;
-      border-radius: 12px;
-      cursor: pointer;
-      margin: 2rem auto;
-      display: block;
-      background: linear-gradient(135deg, #7B61FF, #7C8CF6);
-      color: #fff;
-      font-size: 1.1rem;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-    }
-    .button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 25px rgba(123, 97, 255, 0.35);
-    }
-    .nav {
-      display: flex;
-      justify-content: center;
-      margin-top: 2rem;
-    }
-    .nav a {
-      background: #2563eb;
-      color: #fff;
-      padding: .6rem 1.2rem;
-      border-radius: 8px;
-      text-decoration: none;
-    }
-    .nav a:hover {
-      background: #1e40af;
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🔒 Module 1 — Password Security</h1>
-    <p style="text-align:center;">Learn how to protect your accounts with strong passwords and better habits.</p>
+  <!-- Module Hero / Header -->
+  <header class="module-hero">
+    <div class="container">
+      <h1>🔒 Module 1 — Password Security</h1>
+      <p class="tagline">Protect your accounts with strong passwords and smart habits.</p>
 
-    <!-- Progress Ring -->
-    <div class="ring-wrap">
-      <svg viewBox="0 0 120 120" class="ring">
-        <circle cx="60" cy="60" r="52" class="bg"></circle>
-        <circle cx="60" cy="60" r="52" class="fg" id="ringFG"></circle>
-        <text x="50%" y="52%" text-anchor="middle" class="ring-text" id="ringText">0%</text>
-      </svg>
+      <!-- Linear progress bar (overall module) -->
+      <div class="progress">
+        <div id="progress-fill"></div>
+      </div>
+
+      <!-- Circular progress ring -->
+      <div class="ring-wrap">
+        <svg viewBox="0 0 120 120" class="ring">
+          <circle cx="60" cy="60" r="52" class="bg"></circle>
+          <circle cx="60" cy="60" r="52" class="fg" id="ringFG"></circle>
+          <text x="50%" y="52%" text-anchor="middle" class="ring-text" id="ringText">0%</text>
+        </svg>
+      </div>
+
+      <p class="badge">🎯 Goal: Create strong passwords, use a manager, and enable 2FA</p>
     </div>
+  </header>
 
-    <!-- Reading Cards -->
-    <div class="card">
-      <h3>Lesson 1 — Password Basics</h3>
-      <p>Passwords are your first line of defense. Many attacks succeed simply because of short or reused passwords. Strong passwords act like a digital lock on your personal information.</p>
-      <p class="creator-note">
-        Aarav’s Note: When I first started learning cybersecurity, I realized most hacks don’t need fancy tools—they happen because of weak passwords. Changing mine felt like locking the front door for the first time.
-      </p>
-    </div>
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Short Readings</h2>
 
-    <div class="card">
-      <h3>Lesson 2 — Strong vs Weak Passwords</h3>
-      <p>Short, predictable passwords like "John123" can be cracked in seconds. Instead, use long, random passphrases—four or five unrelated words—so they're memorable but extremely hard to guess.</p>
-      <p class="creator-note">
-        Aarav’s Note: I used to think adding numbers made a password strong. Once I learned that <em>length and randomness</em> matter more, I started using short phrases instead—way easier to remember and much safer.
-      </p>
-    </div>
+        <!-- Card 1 -->
+        <article class="card">
+          <h3>1) Password Basics</h3>
+          <p>
+            Passwords are your first line of defense. Many attacks succeed because of short or reused
+            passwords. Strong passwords act like a serious lock on your personal info.
+          </p>
+          <p class="creator-note">
+            Aarav’s Note: When I first started learning cybersecurity, I realized most hacks don’t need
+            fancy tools—they happen because of weak passwords. Changing mine felt like locking the
+            front door for the first time.
+          </p>
+        </article>
 
-    <div class="card">
-      <h3>Lesson 3 — Password Managers</h3>
-      <p>Password managers generate and store unique, complex passwords for every site. You only need to remember one master password while the manager handles the rest securely.</p>
-      <p class="creator-note">
-        Aarav’s Note: I hesitated to trust a password manager at first, but using Bitwarden honestly changed everything. I went from reusing a few passwords to having over a hundred unique ones without stress.
-      </p>
-    </div>
+        <!-- Card 2 -->
+        <article class="card">
+          <h3>2) Strong vs Weak</h3>
+          <p>
+            Short, predictable passwords (like “John123”) are cracked in seconds. Use long passphrases
+            (12+ chars) made of unrelated words, e.g. <code>correct-horse-battery-staple-2025</code>.
+          </p>
+          <ul class="bullets">
+            <li>12+ characters is the modern baseline.</li>
+            <li>Random words &gt; predictable patterns.</li>
+            <li>Length + randomness beat short + “fancy”.</li>
+          </ul>
+          <p class="creator-note">
+            Aarav’s Note: I used to think adding numbers made a password strong. Once I learned that
+            <em>length and randomness</em> matter more, I switched to short phrases—easier to remember
+            and much safer.
+          </p>
+        </article>
 
-    <div class="card">
-      <h3>Lesson 4 — Two-Factor Authentication (2FA)</h3>
-      <p>2FA adds an extra layer of security beyond passwords. Even if someone steals your password, they can’t log in without the second verification—like a code from your phone or a hardware key.</p>
-      <p class="creator-note">
-        Aarav’s Note: I only understood how powerful 2FA was after seeing a friend’s social-media account get stolen. Now every important account I own has it turned on—no excuses.
-      </p>
-    </div>
+        <!-- Card 3 -->
+        <article class="card">
+          <h3>3) Password Managers</h3>
+          <p>
+            A password manager is a secure vault. You remember one master password while it generates
+            and stores unique passwords for every site, then auto-fills them for you.
+          </p>
+          <ul class="bullets">
+            <li>Eliminates reuse across sites.</li>
+            <li>Pick a strong master passphrase.</li>
+            <li>Examples: Bitwarden, 1Password.</li>
+          </ul>
+          <p class="creator-note">
+            Aarav’s Note: I hesitated to trust a manager at first, but using Bitwarden changed
+            everything. I went from reusing a few passwords to 100+ unique ones without stress.
+          </p>
+        </article>
 
-    <!-- Start Quiz -->
-    <a href="./quiz-prototype.html">
-      <button class="button">Start Quiz →</button>
-    </a>
+        <!-- Card 4 -->
+        <article class="card">
+          <h3>4) Two-Factor Authentication (2FA)</h3>
+          <p>
+            2FA adds a second step after your password (code from an app or a hardware key). If your
+            password leaks, 2FA still blocks attackers. Turn it on for email, banking, and socials.
+          </p>
+          <ul class="bullets">
+            <li>Best → Hardware key (e.g., YubiKey)</li>
+            <li>Strong → Authenticator app (TOTP)</li>
+            <li>OK → SMS (use if no other option)</li>
+          </ul>
+          <p class="creator-note">
+            Aarav’s Note: I only “got” 2FA after a friend’s account was stolen. Now every important
+            account I own has it on—no excuses.
+          </p>
+        </article>
 
-    <!-- Navigation -->
-    <div class="nav">
-      <a href="../../index.html">← Back to Home</a>
-    </div>
-  </div>
+        <!-- CTA -->
+        <div class="cta-center">
+          <a class="btn btn-primary btn-xl" href="./quiz-prototype.html">Take the Password Security Quiz →</a>
+        </div>
+
+        <!-- Back nav -->
+        <div class="module-nav">
+          <a class="btn" href="../../index.html">← Back to Home</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded",()=>{
-      const fg=document.getElementById("ringFG");
-      const tx=document.getElementById("ringText");
-      const percent=50; // placeholder until dynamic progress logic
-      const dash=327*(1-percent/100);
-      fg.style.strokeDashoffset=dash;
-      tx.textContent=percent+"%";
+    // Progress helpers (works with your modules.js if present)
+    function percentFromSS(){
+      try {
+        if (window.SS && typeof SS.progressPercent === "function") {
+          return SS.progressPercent();
+        }
+      } catch(e){}
+      return 0; // fallback if SS not loaded
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const linear = document.getElementById("progress-fill");
+      const ring = document.getElementById("ringFG");
+      const ringText = document.getElementById("ringText");
+
+      const pct = Math.max(0, Math.min(100, percentFromSS())); // clamp 0..100
+      if (linear) linear.style.width = pct + "%";
+
+      // ring circumference ≈ 2πr → with r=52 we pre-set 327 as dasharray
+      const dash = 327 * (1 - pct/100);
+      if (ring) ring.style.strokeDashoffset = dash;
+      if (ringText) ringText.textContent = pct + "%";
     });
   </script>
 </body>
