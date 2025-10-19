@@ -72,17 +72,19 @@
     }
 
     function showAchievement(){
-      const wrap=document.createElement("div");
-      wrap.innerHTML=`
-        <div style="position:fixed;inset:0;background:rgba(15,23,42,.55);display:grid;place-items:center;z-index:9998">
-          <div style="background:#fff;border-radius:16px;padding:1.2rem 1.4rem;max-width:360px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.25)">
-            <div style="font-size:2rem">🏆</div>
-            <h3 style="margin:.5rem 0">Achievement Unlocked</h3>
-            <p class="muted" style="margin:.3rem 0 1rem">Password Pro — you passed the quiz!</p>
-            <button class="button" onclick="this.closest('div[style]')?.parentElement.remove()">Nice!</button>
-          </div>
-        </div>`;
-      document.body.appendChild(wrap.firstElementChild);
+      // overlay + modal with classes your CSS targets
+      const overlay = document.createElement("div");
+      overlay.className = "achv-overlay";
+      overlay.innerHTML = `
+        <div class="achievement-modal">
+          <div class="emoji">🏆</div>
+          <h3>Achievement Unlocked</h3>
+          <p>Password Pro — you passed the quiz!</p>
+          <button class="achv-close">Nice!</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      overlay.querySelector(".achv-close").addEventListener("click", () => overlay.remove());
     }
     /* ---------------------------------------------------------------- */
 
@@ -105,9 +107,8 @@
     let answered = false;
 
     function updateModuleProgress(){
-      if (!window.SS) return;
       const fill = document.getElementById("moduleProgress");
-      if (fill) fill.style.width = SS.progressPercent() + "%";
+      if (window.SS && fill) fill.style.width = SS.progressPercent() + "%";
     }
 
     function loadQ(){
