@@ -5,80 +5,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Module 1 — Password Security | SecureScholar</title>
 
-  <!-- Shared module styles and scripts -->
+  <!-- these files live in the same folder as this file -->
   <link rel="stylesheet" href="./modules.css" />
   <script defer src="./modules.js"></script>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Update progress bar when page loads
-      const fill = document.getElementById("fill");
-      if (fill) fill.style.width = SS.progressPercent() + "%";
+      if (window.SS) {
+        const fill = document.getElementById("progress-fill");
+        if (fill) fill.style.width = SS.progressPercent() + "%";
+        const pts = document.getElementById("points");
+        if (pts) pts.textContent = SS.loadState().points || 0;
+      }
     });
   </script>
 </head>
-
 <body>
-  <div class="module-wrap">
-    <h1>🔒 Module 1 — Password Security</h1>
-    <p class="badge">🎯 Goal: Learn to create and manage strong passwords safely.</p>
-
-    <div class="progress">
-      <div id="fill"></div>
+  <header class="module-header">
+    <div class="container">
+      <h1>🔒 Module 1 — Password Security</h1>
+      <p class="badge">🎯 Goal: Learn to create and manage strong passwords safely.</p>
+      <div class="progress"><div id="progress-fill"></div></div>
     </div>
+  </header>
 
-    <section>
-      <h2>Overview</h2>
-      <p>
-        This module teaches the foundations of password security — why strong passwords
-        matter, how to make them stronger, and how to protect accounts using password
-        managers and two-factor authentication (2FA).
-      </p>
-    </section>
-
-    <section>
-      <h2>Learning Objectives</h2>
-      <ul>
-        <li>Understand what makes a password strong.</li>
-        <li>Identify and avoid weak or common passwords.</li>
-        <li>Learn how password managers keep your credentials safe.</li>
-        <li>Enable 2FA to protect high-value accounts.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Interactive Quiz</h2>
-      <p>
-        Ready to test your knowledge? Take the short quiz below and see if you can
-        earn the <strong>“Password Pro”</strong> badge.
-      </p>
-      <div class="module-nav">
-        <a href="./quiz-prototype.html">➡️ Take the Password Security Quiz</a>
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Overview</h2>
+        <p>
+          This module covers password basics, what makes a password strong, how to use a password
+          manager, and when to enable two-factor authentication (2FA).
+        </p>
       </div>
     </section>
 
-    <section>
-      <h2>Gamification</h2>
-      <ul>
-        <li>✅ Complete this quiz: <strong>+50 points</strong></li>
-        <li>🏆 Perfect score bonus: <strong>+25 points</strong></li>
-        <li>🎖️ Earn achievements like “Quiz Master” and “Security Starter.”</li>
-      </ul>
+    <!-- SHORT READINGS -->
+    <section class="section alt">
+      <div class="container">
+        <h3 class="section-title">Short Readings</h3>
+        <div class="grid">
+          <article class="card">
+            <h4>1) Password Basics (2 min)</h4>
+            <p>Passwords are your first line of defense. Biggest risks: reuse, short/simple choices (like <em>password123</em>), and personal info. If one site is breached, reuse lets attackers try the same login elsewhere.</p>
+            <ul class="bullets"><li>Avoid reuse across sites.</li><li>Never share your password.</li><li>Use a password manager to store them safely.</li></ul>
+          </article>
+          <article class="card">
+            <h4>2) Strong vs Weak (3 min)</h4>
+            <p><strong>Length</strong> wins — go 12+ characters. Add variety (upper/lowercase, numbers, symbols) and avoid dictionary words. Passphrases of unrelated words work well: <code>correct-horse-battery-staple-2025</code>.</p>
+            <ul class="bullets"><li>12+ characters baseline.</li><li>Random words &gt; predictable patterns.</li><li>Long + random &gt; short + fancy.</li></ul>
+          </article>
+          <article class="card">
+            <h4>3) Password Managers (2 min)</h4>
+            <p>A password manager is a secure vault. You remember one master password; it generates and stores unique passwords for every site and auto-fills them for you.</p>
+            <ul class="bullets"><li>Eliminates reuse.</li><li>Pick a strong master passphrase.</li><li>Examples: Bitwarden, 1Password.</li></ul>
+          </article>
+          <article class="card">
+            <h4>4) Two-Factor Authentication (2 min)</h4>
+            <p>2FA adds a second step after your password (e.g., code from an app or a hardware key). Turn on 2FA for email, banking, and social accounts first.</p>
+            <ul class="bullets"><li>Best → Hardware key (YubiKey).</li><li>Strong → Authenticator app.</li><li>Okay → SMS (use if no other option).</li></ul>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section>
-      <h2>Next Steps</h2>
-      <ul>
-        <li>Review quiz results to see what you learned.</li>
-        <li>Apply password tips to your real accounts.</li>
-        <li>Continue to Module 2 (coming soon).</li>
-      </ul>
-    </section>
+    <!-- GAMIFICATION + CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="card highlight">
+          <div class="row">
+            <div>
+              <h3 class="section-title">Ready to test yourself?</h3>
+              <p class="muted">Earn points and unlock achievements.</p>
+              <ul class="bullets">
+                <li>✅ Pass the quiz (≥ 70%): <strong>+50 points</strong></li>
+                <li>🏆 Perfect score: <strong>+25 bonus</strong></li>
+              </ul>
+              <p><strong>Current Points:</strong> <span id="points">0</span></p>
+            </div>
+            <div class="cta-wrap">
+              <a class="btn btn-primary btn-xl" href="./quiz-prototype.html">
+                Take the Password Security Quiz
+              </a>
+            </div>
+          </div>
+        </div>
 
-    <div class="module-nav">
-      <a href="./quiz-prototype.html">Take Quiz →</a>
-      <a href="../../index.html">← Back to Home</a>
-    </div>
-  </div>
+        <div class="module-nav" style="margin-top:1rem">
+          <!-- back to root from src/modules/module1.html -->
+          <a class="btn" href="../../index.html">← Back to Home</a>
+        </div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
