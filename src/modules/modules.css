@@ -251,3 +251,16 @@ body {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
+
+/* overlay behind modal */
+.achv-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,.55);
+  display: grid;
+  place-items: center;
+  z-index: 9998;
+}
+
+/* modal look (plus dark-mode) — you already pasted the big block */
+.achievement-modal { /* ...your styles from earlier... */ }
