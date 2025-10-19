@@ -1,27 +1,84 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Module 1 • Lesson 1 — Password Basics</title>
-<link rel="stylesheet" href="../../modules.css">
-<script defer src="../../modules.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded',()=>{
-  SS.markLessonDone('lesson1');
-  document.getElementById('fill').style.width = SS.progressPercent() + '%';
-});
-</script>
-</head><body>
-<div class="module-wrap">
-  <h1>🔒 Lesson 1: Password Basics</h1>
-  <div class="progress"><div id="fill"></div></div>
-  <p><strong>Why passwords matter:</strong> first line of defense. Avoid reuse, short length, and personal info.</p>
-  <ul>
-    <li>What is a password?</li>
-    <li>Most common mistakes (reusing, dictionary words, “password123”).</li>
-    <li>Quick self-check: have you done any of these?</li>
-  </ul>
-  <div class="module-nav">
-    <a href="./lesson2.html">Next → Lesson 2</a>
-    <a href="../module1.html">Module 1 Index</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 1 — Password Security | SecureScholar</title>
+
+  <!-- Shared module styles and scripts -->
+  <link rel="stylesheet" href="./modules.css" />
+  <script defer src="./modules.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Update progress bar when page loads
+      const fill = document.getElementById("fill");
+      if (fill) fill.style.width = SS.progressPercent() + "%";
+    });
+  </script>
+</head>
+
+<body>
+  <div class="module-wrap">
+    <h1>🔒 Module 1 — Password Security</h1>
+    <p class="badge">🎯 Goal: Learn to create and manage strong passwords safely.</p>
+
+    <div class="progress">
+      <div id="fill"></div>
+    </div>
+
+    <section>
+      <h2>Overview</h2>
+      <p>
+        This module teaches the foundations of password security — why strong passwords
+        matter, how to make them stronger, and how to protect accounts using password
+        managers and two-factor authentication (2FA).
+      </p>
+    </section>
+
+    <section>
+      <h2>Learning Objectives</h2>
+      <ul>
+        <li>Understand what makes a password strong.</li>
+        <li>Identify and avoid weak or common passwords.</li>
+        <li>Learn how password managers keep your credentials safe.</li>
+        <li>Enable 2FA to protect high-value accounts.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Interactive Quiz</h2>
+      <p>
+        Ready to test your knowledge? Take the short quiz below and see if you can
+        earn the <strong>“Password Pro”</strong> badge.
+      </p>
+      <div class="module-nav">
+        <a href="./quiz-prototype.html">➡️ Take the Password Security Quiz</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Gamification</h2>
+      <ul>
+        <li>✅ Complete this quiz: <strong>+50 points</strong></li>
+        <li>🏆 Perfect score bonus: <strong>+25 points</strong></li>
+        <li>🎖️ Earn achievements like “Quiz Master” and “Security Starter.”</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Next Steps</h2>
+      <ul>
+        <li>Review quiz results to see what you learned.</li>
+        <li>Apply password tips to your real accounts.</li>
+        <li>Continue to Module 2 (coming soon).</li>
+      </ul>
+    </section>
+
+    <div class="module-nav">
+      <a href="./quiz-prototype.html">Take Quiz →</a>
+      <a href="../../index.html">← Back to Home</a>
+    </div>
   </div>
-</div>
-</body></html>
+</body>
+</html>
