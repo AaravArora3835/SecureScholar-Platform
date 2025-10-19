@@ -2,8 +2,8 @@
 
 **Status:**  Live (Phase 1 — Foundation)  
 **Timeline:** October 2025 – August 2026  
-**Live Demo:** https://aaravarora3835.github.io/SecureScholar-Platform
 **Tech Stack:** HTML, CSS, JavaScript (Vanilla)
+**Live Demo:** https://aaravarora3835.github.io/SecureScholar-Platform
 
 ---
 
@@ -100,5 +100,6 @@ Future entries will cover feature modules, UI improvements, and gamification.
 **Related Projects:**
 - [Google Cybersecurity Certificate](https://github.com/AaravArora3835/Google-Cybersecurity-Certificate) — Foundational certification journey  
 - [Cybersecurity Homelab](https://github.com/AaravArora3835/Cybersecurity-Homelab) — Virtual machine and network setup  
+
 
 
