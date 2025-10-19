@@ -137,3 +137,117 @@ body {
   .ring .bg { stroke: #25324a; }
   .ring-text { fill: #c7d2fe; }
 }
+
+/* ----- Dark-mode readability tune-up ----- */
+@media (prefers-color-scheme: dark) {
+  /* Base body text a touch brighter */
+  body { color: #e6e8ee; }
+
+  /* Card background + text */
+  .card {
+    background: #0b1220;
+    color: #e6e8ee; /* brighter paragraph text */
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Section and card headings */
+  .section-title,
+  .card h3 { color: #c7d2fe; }        /* soft indigo */
+  
+  /* Creator note box */
+  .creator-note {
+    background: #0f1a33;              /* deeper navy chip */
+    color: #e9eefc;                    /* lighter text */
+    border-left-color: #8b5cf6;        /* brighter accent */
+  }
+
+  /* Muted helper text */
+  .muted { color: #9fb0ca; }
+
+  /* Links in dark mode */
+  a, .card a {
+    color: #93c5fd;                    /* light blue */
+  }
+  a:hover, .card a:hover {
+    color: #bfdbfe;                    /* brighter on hover */
+  }
+}
+
+/* ============================
+   Achievement Popup Styling Fix
+   ============================ */
+
+.achievement-modal {
+  background: #ffffff;
+  color: #1f2937;
+  border-radius: 14px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  width: 320px;
+  max-width: 90%;
+  margin: 2rem auto;
+  animation: fadeIn 0.4s ease;
+}
+
+.achievement-modal h3 {
+  font-size: 1.3rem;
+  color: #1e3a8a;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.achievement-modal p {
+  color: #334155;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.achievement-modal .emoji {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.achievement-modal button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.achievement-modal button:hover {
+  background: #1e40af;
+}
+
+/* Dark mode improvement */
+@media (prefers-color-scheme: dark) {
+  .achievement-modal {
+    background: #0b1220;
+    color: #e6e8ee;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  .achievement-modal h3 {
+    color: #c7d2fe; /* brighter headline */
+  }
+
+  .achievement-modal p {
+    color: #e5e7eb; /* higher contrast paragraph */
+  }
+
+  .achievement-modal button {
+    background: #3b82f6;
+  }
+  .achievement-modal button:hover {
+    background: #2563eb;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
