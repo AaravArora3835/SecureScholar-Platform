@@ -3,11 +3,11 @@
 
 ---
 
-## Week 0 (Oct 17-19, 2025) — The "Holy Shit I Actually Built Something" Week
+## Week 0 (Oct 17-19, 2025) — The "Holy Crap I Actually Built Something" Week
 
 **Phase:** Panic-driven MVP  
 **Hours:** ~8 hours total (not 2.5 - be honest)  
-**Live Site:** [https://securescholar.netlify.app](https://securescholar.netlify.app)  
+**Live Site:** [github.io Secure Scholar App](https://aaravarora3835.github.io/SecureScholar-Platform/)  
 **Mental State:** 60% excited, 40% terrified this looks like every other student project
 
 ---
@@ -391,3 +391,4 @@ SecureScholar/
 - **2025-10-19:** Fixed fake metrics on landing page (removed "300+ users")
 - **2025-10-19:** Added this brutally honest DEVLOG
 ```
+
