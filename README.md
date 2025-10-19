@@ -57,16 +57,6 @@ This platform is developed publicly throughout my **2025-2026 Cybersecurity Road
 
 ---
 
-## Key Screenshots
-
-| Screenshot | Description |
-|-------------|--------------|
-| ![Landing Page](screenshots/2025-10-17_SecureScholar_Landing.png) | Live landing page showcasing SecureScholar’s foundation. |
-| ![Folder Tree](screenshots/2025-10-17_Project_Folder_Tree.png) | Local project structure showing organized folders. |
-| ![Console OK](screenshots/2025-10-17_Browser_Console_OK.png) | Browser Console logs confirm successful JavaScript execution. |
-
----
-
 ## Development Log
 
 All week-by-week progress is recorded in [`DEVLOG.md`](DEVLOG.md).  
@@ -99,6 +89,7 @@ Future entries will cover feature modules, UI improvements, and gamification.
 **Related Projects:**
 - [Google Cybersecurity Certificate](https://github.com/AaravArora3835/Google-Cybersecurity-Certificate) — Foundational certification journey  
 - [Cybersecurity Homelab](https://github.com/AaravArora3835/Cybersecurity-Homelab) — Virtual machine and network setup  
+
 
 
 
