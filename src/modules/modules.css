@@ -93,6 +93,23 @@
   transition: background 0.3s ease;
 }
 
+body {
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+}
+
+.module-wrap h1 { color: #1e3a8a; }
+.module-wrap h2 { color: #312e81; }
+
+.module-nav a {
+  background: #2563eb;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+.module-nav a:hover { background: #1e40af; }
+
 .start-btn:hover {
   background: #1e40af;
 }
