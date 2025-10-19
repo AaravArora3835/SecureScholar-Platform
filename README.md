@@ -19,7 +19,7 @@ This platform is developed publicly throughout my **2025-2026 Cybersecurity Road
 ##  Development Phases
 
 ### Phase 1: Foundation (Oct–Dec 2025)
-- Landing page (HTML/CSS/JS)
+- [ ] Landing page (HTML/CSS/JS)
 - [ ] User authentication
 - [ ] Module 1: Password Security
 - [ ] Points + XP system
@@ -99,6 +99,7 @@ Future entries will cover feature modules, UI improvements, and gamification.
 **Related Projects:**
 - [Google Cybersecurity Certificate](https://github.com/AaravArora3835/Google-Cybersecurity-Certificate) — Foundational certification journey  
 - [Cybersecurity Homelab](https://github.com/AaravArora3835/Cybersecurity-Homelab) — Virtual machine and network setup  
+
 
 
 
