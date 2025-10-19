@@ -1,0 +1,53 @@
+.module-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+.module-nav {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 2rem;
+}
+
+.module-nav a {
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+
+.progress {
+  height: 10px;
+  background: #eee;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress > div {
+  height: 100%;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .module-nav a {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  .progress {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
