@@ -3,16 +3,149 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Password Security Quiz (Coming Soon)</title>
+  <title>Password Security Quiz</title>
+
+  <!-- Shared styles/scripts (same folder as this file) -->
   <link rel="stylesheet" href="./modules.css" />
+  <script defer src="./modules.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding: 2rem; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 1.5rem; }
+    .quiz-card { border:1px solid rgba(0,0,0,.1); border-radius:14px; padding:1rem; margin:1rem 0; }
+    .option { border:1px solid rgba(0,0,0,.12); border-radius:10px; padding:1rem; cursor:pointer; margin:.5rem 0; }
+    .option:hover { background: rgba(0,0,0,.04); }
+    .option.correct { border-color:#22c55e; background: rgba(34,197,94,.12); }
+    .option.incorrect { border-color:#ef4444; background: rgba(239,68,68,.12); }
+    .button { border:none; padding:1rem 1.5rem; border-radius:10px; cursor:pointer; margin:1rem auto; display:block; background:#2563eb; color:#fff; }
+    .button:hover { background:#1e40af; }
+    .progress { height:10px; background:#eee; border-radius:6px; overflow:hidden; margin:1rem 0; }
+    .progress > div { height:100%; width:0%; background:#fbbf24; transition: width .3s ease; }
+    .nav { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
+    .nav a { background:#2563eb; color:#fff; padding:.5rem 1rem; border-radius:8px; text-decoration:none; }
+    .nav a:hover { background:#1e40af; }
+  </style>
 </head>
 <body>
-  <div class="module-wrap">
-    <h1>🔒 Password Security Quiz</h1>
-    <p>This interactive quiz will be added soon!</p>
-    <div class="module-nav">
+  <div class="container">
+    <div class="header">
+      <h1>🔒 Password Security Quiz</h1>
+      <p>Module 1 — Test your knowledge</p>
+    </div>
+
+    <!-- Module progress (overall) -->
+    <div class="progress"><div id="moduleProgress"></div></div>
+
+    <div id="quiz"></div>
+
+    <button class="button" id="nextBtn" style="display:none" onclick="nextQ()">Next Question</button>
+    <button class="button" id="finishBtn" style="display:none" onclick="finish()">See Results</button>
+
+    <div id="results" style="text-align:center; font-size:1.2rem; margin-top:1rem; display:none;"></div>
+
+    <div class="nav">
       <a href="./module1.html">← Back to Module 1</a>
     </div>
   </div>
+
+  <script>
+    // 10-question bank
+    const quizData = [
+      { q: "What's the minimum recommended password length?", opts: ["6","8","12","20"], a: 2, x: "12+ characters is the modern baseline for strong passwords." },
+      { q: "Which password is strongest?", opts: ["JohnDoe123","P@ssw0rd!","correct-horse-battery-staple","iloveyou"], a: 2, x: "Long random passphrases are hardest to crack and easier to remember." },
+      { q: "2FA stands for…", opts: ["Two-Factor Authentication","Two-File Access","Total Factor Authorization","Trusted Friend Access"], a:0, x:"A second factor (something you have/are) added to your password (something you know)." },
+      { q: "Using the same strong password on all sites is safe.", opts:["True","False"], a:1, x:"If one site is breached, attackers try the same password everywhere." },
+      { q: "Which is the BEST type of 2FA?", opts:["SMS codes","Email codes","Authenticator app","Hardware key"], a:3, x:"Hardware security keys resist phishing and SIM-swaps; apps are second-best." },
+      { q: "A password manager primarily helps by…", opts:["Sending password resets","Storing/generating unique passwords securely","Creating accounts for you","Blocking phishing emails"], a:1, x:"Use it to generate and store unique passwords for every site." },
+      { q: "‘password123’ is weak mainly because…", opts:["It has numbers","It’s too short and common","It uses only lowercase","It’s hard to type"], a:1, x:"Common words + predictable numbers are first in attacker wordlists." },
+      { q: "Why is 'correct-horse-battery-staple-2025' strong?", opts:["It uses symbols","It’s long and less predictable","It’s all caps","It has your birth year"], a:1, x:"Length dominates strength—several unrelated words expand the search space." },
+      { q: "Which accounts should have 2FA at minimum?", opts:["Email","Banking","Social media","All of the above"], a:3, x:"Enable 2FA anywhere possible, especially email, banking, and socials." },
+      { q: "Browser password managers are always equal to dedicated ones.", opts:["True","False"], a:1, x:"Dedicated managers usually have stronger features and cross-platform support." }
+    ];
+
+    let i = 0;
+    let score = 0;
+    let answered = false;
+
+    function updateModuleProgress(){
+      const fill = document.getElementById("moduleProgress");
+      if (!fill) return;
+      // progressPercent() uses SS.quizScore>0 to mark module segment as done
+      fill.style.width = SS.progressPercent() + "%";
+    }
+
+    function loadQ(){
+      const q = quizData[i];
+      const root = document.getElementById("quiz");
+      let html = `
+        <div class="quiz-card">
+          <div><strong>Question ${i+1} of ${quizData.length}</strong></div>
+          <p style="margin:.6rem 0 1rem">${q.q}</p>
+      `;
+      q.opts.forEach((opt, idx) => {
+        html += `<div class="option" onclick="selectA(${idx})">${String.fromCharCode(65+idx)}) ${opt}</div>`;
+      });
+      html += `<div id="fb" style="margin-top:.8rem;display:none"></div></div>`;
+      root.innerHTML = html;
+
+      document.getElementById("nextBtn").style.display = (i < quizData.length - 1) ? "block" : "none";
+      document.getElementById("finishBtn").style.display = (i === quizData.length - 1) ? "block" : "none";
+      answered = false;
+    }
+
+    function selectA(idx){
+      if (answered) return;
+      answered = true;
+      const q = quizData[i];
+      const opts = document.querySelectorAll(".option");
+      const fb = document.getElementById("fb");
+
+      if (idx === q.a){
+        opts[idx].classList.add("correct");
+        fb.textContent = "✅ Correct. " + q.x;
+        score += 10;
+      } else {
+        opts[idx].classList.add("incorrect");
+        opts[q.a].classList.add("correct");
+        fb.textContent = "❌ Not quite. " + q.x;
+      }
+      fb.style.display = "block";
+    }
+
+    function nextQ(){ i++; loadQ(); }
+
+    function finish(){
+      const total = quizData.length * 10;
+      const pct = Math.round((score / total) * 100);
+
+      // Points integration (uses your existing modules.js helpers)
+      if (pct >= 70) SS.awardPoints(50); // pass bonus
+      if (pct === 100) SS.awardPoints(25); // perfect bonus
+      SS.setQuizScore(score);
+
+      updateModuleProgress();
+
+      const r = document.getElementById("results");
+      r.style.display = "block";
+      r.innerHTML = `
+        <div>Your Score: <strong>${score}/${total}</strong> (${pct}%)</div>
+        <button class="button" onclick="location.reload()">Try Again</button>
+      `;
+
+      // hide quiz UI
+      document.getElementById("quiz").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("finishBtn").style.display = "none";
+      // set progress bar to full for visual closure
+      document.getElementById("moduleProgress").style.width = "100%";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateModuleProgress();
+      loadQ();
+    });
+  </script>
 </body>
 </html>
