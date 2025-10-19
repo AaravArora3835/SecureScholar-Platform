@@ -6,59 +6,63 @@
   <title>SecureScholar - Learn Cybersecurity</title>
   <link rel="stylesheet" href="src/css/style.css" />
 </head>
-
 <body>
-  <div class="container">
-    <header>
-      <h1>🔒 SecureScholar</h1>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="brand">🔒 SecureScholar</h1>
       <p class="tagline">Gamified Cybersecurity Learning for Students</p>
-    </header>
+    </div>
+  </header>
 
-    <main>
-      <!-- Hero Section -->
-      <section class="hero">
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
         <h2>Building in Public</h2>
-        <p class="launch-date">Launching: October 2025 - August 2026</p>
+        <p class="launch-date">Launching: October 2025 – August 2026</p>
         <p class="description">
-          A 10-month journey to build an interactive cybersecurity
-          education platform for students. Follow along as I learn, build,
-          and launch.
+          A 10-month journey to build an interactive cybersecurity education platform
+          for students. Follow along as I learn, build, and launch.
         </p>
 
-        <!-- ✅ Optional Start Button -->
-        <a class="start-btn" href="src/modules/module1.html">Start Module 1</a>
-      </section>
+        <!-- ✅ Big, obvious CTA -->
+        <a class="btn btn-primary btn-lg" href="modules/module1.html">Start Module 1: Password Security</a>
+      </div>
+    </section>
 
-      <!-- Planned Features -->
-      <section class="features">
-        <h3>Planned Features</h3>
-        <div class="feature-grid">
-          <div class="feature-card">
-            <span class="emoji">📚</span>
+    <!-- FEATURES -->
+    <section class="section">
+      <div class="container">
+        <h3 class="section-title">Planned Features</h3>
+        <div class="grid">
+          <div class="card">
+            <div class="emoji">📚</div>
             <h4>6 Interactive Modules</h4>
             <p>Password security, phishing, networking, encryption, and more.</p>
           </div>
-          <div class="feature-card">
-            <span class="emoji">🏆</span>
+          <div class="card">
+            <div class="emoji">🏆</div>
             <h4>Gamification</h4>
             <p>Points, badges, leaderboards, and weekly challenges.</p>
           </div>
-          <div class="feature-card">
-            <span class="emoji">👥</span>
+          <div class="card">
+            <div class="emoji">👥</div>
             <h4>User Profiles</h4>
             <p>Track progress and compete with friends.</p>
           </div>
-          <div class="feature-card">
-            <span class="emoji">🎯</span>
+          <div class="card">
+            <div class="emoji">🎯</div>
             <h4>Beginner-Friendly</h4>
             <p>Designed for high-school students with no prior experience.</p>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Development Timeline -->
-      <section class="journey">
-        <h3>Development Timeline</h3>
+    <!-- TIMELINE -->
+    <section class="section alt">
+      <div class="container">
+        <h3 class="section-title">Development Timeline</h3>
         <div class="timeline">
           <div class="phase"><strong>Phase 1 (Oct–Dec):</strong> Foundation + Module 1</div>
           <div class="phase"><strong>Phase 2 (Jan–Feb):</strong> Modules 2–4</div>
@@ -66,24 +70,28 @@
           <div class="phase"><strong>Phase 4 (May–Jun):</strong> Advanced Modules</div>
           <div class="phase"><strong>Phase 5 (Jul–Aug):</strong> Polish + Launch</div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- ✅ Learning Modules Section -->
-      <section class="modules">
-        <h2>Learning Modules</h2>
+    <!-- MODULES LIST -->
+    <section class="section">
+      <div class="container">
+        <h3 class="section-title">Learning Modules</h3>
         <p>Start exploring cybersecurity fundamentals:</p>
-        <ul>
-          <li><a href="src/modules/module1.html">Module 1 — Password Security</a></li>
-          <!-- future modules will go here -->
+        <ul class="module-list">
+          <li><a class="link" href="modules/module1.html">Module 1 — Password Security</a></li>
+          <!-- future modules here -->
         </ul>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
 
-    <footer>
+  <footer class="site-footer">
+    <div class="container">
       <p>Built by Aarav Arora</p>
-      <p class="update">Last Updated: October 2025</p>
-    </footer>
-  </div>
+      <p class="muted">Last Updated: October 2025</p>
+    </div>
+  </footer>
 
   <script src="src/js/app.js"></script>
 </body>
