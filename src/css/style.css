@@ -276,3 +276,29 @@ body {
   color: #1f2937;
   background: linear-gradient(135deg, #f5f7ff, #eef2ff);
 }
+
+/* Animated gradient background */
+.hero { position: relative; overflow: hidden; }
+.hero::before{
+  content:""; position:absolute; inset:-20%;
+  background: radial-gradient(60% 60% at 20% 20%, #7b61ff33 0%, transparent 60%),
+              radial-gradient(60% 60% at 80% 30%, #7c8cf633 0%, transparent 60%),
+              radial-gradient(70% 70% at 50% 80%, #22c55e22 0%, transparent 70%);
+  filter: blur(40px);
+  animation: floatGlow 18s ease-in-out infinite alternate;
+}
+@keyframes floatGlow{
+  0%{ transform: translate3d(0,0,0) scale(1); }
+  100%{ transform: translate3d(-3%, 2%, 0) scale(1.05); }
+}
+
+/* CTA pulse */
+.btn-xl.btn-primary{
+  box-shadow: 0 12px 30px rgba(37,99,235,.35);
+  animation: ctaPulse 2.6s ease-in-out infinite;
+}
+@keyframes ctaPulse{
+  0%,100%{ transform: translateY(0) scale(1); }
+  50%{ transform: translateY(-2px) scale(1.01); box-shadow:0 18px 38px rgba(37,99,235,.45); }
+}
+
