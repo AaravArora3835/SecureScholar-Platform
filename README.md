@@ -10,9 +10,10 @@
 ##  Vision
 
 SecureScholar is a **gamified cybersecurity learning platform** built by Aarav Arora for high school students.  
-Think *“Duolingo meets TryHackMe”* — interactive, fun, and beginner-friendly cybersecurity education.
+Think *“Duolingo meets TryHackMe”* 
+Interactive, fun, and beginner-friendly cybersecurity education.
 
-This platform is developed publicly throughout Aarav’s **2025-2026 Cybersecurity Roadmap**, evolving across five phases of design, coding, and teaching.
+This platform is developed publicly throughout my **2025-2026 Cybersecurity Roadmap**, evolving across five phases of design, coding, and teaching.
 
 ---
 
@@ -57,28 +58,6 @@ This platform is developed publicly throughout Aarav’s **2025-2026 Cybersecuri
 
 ---
 
-## Folder Structure
-
-<pre>
-SecureScholar-Platform/
-├── index.html
-├── README.md
-├── DEVLOG.md
-│
-├── src/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── app.js
-│
-└── screenshots/
-    ├── 2025-10-17_SecureScholar_Landing.png
-    ├── 2025-10-17_Project_Folder_Tree.png
-    └── 2025-10-17_Browser_Console_OK.png
-</pre>
-
----
-
 ## Key Screenshots
 
 | Screenshot | Description |
@@ -110,10 +89,14 @@ Future entries will cover feature modules, UI improvements, and gamification.
 
 **MIT License** — you’re free to learn from this code and adapt it for educational purposes.  
 
+---
 
+---
 
+## Part of Larger Journey
 
+**Full Portfolio:** [Cybersecurity-Portfolio-Hub](https://github.com/AaravArora3835/Cybersecurity-Portfolio-Hub)
 
-
-
-
+**Related Projects:**
+- [Google Cybersecurity Certificate](https://github.com/AaravArora3835/Google-Cybersecurity-Certificate) — Foundational certification journey  
+- [Cybersecurity Homelab](https://github.com/AaravArora3835/Cybersecurity-Homelab) — Virtual machine and network setup  
