@@ -5,64 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Password Security Quiz (Adaptive)</title>
 
-  <!-- Shared styles/scripts in this folder -->
+  <!-- Shared styles/scripts (same folder) -->
   <link rel="stylesheet" href="./modules.css" />
   <script defer src="./modules.js"></script>
 
   <style>
     * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding: 2rem; }
-    .container { max-width: 800px; margin: 0 auto; }
-    .header { text-align: center; margin-bottom: 1.5rem; }
+    .container { max-width: 860px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 1.25rem; }
+
     .quiz-card { border:1px solid rgba(0,0,0,.1); border-radius:14px; padding:1rem; margin:1rem 0; background:#fff; }
     .option { border:1px solid rgba(0,0,0,.12); border-radius:10px; padding:1rem; cursor:pointer; margin:.5rem 0; }
     .option:hover { background: rgba(0,0,0,.04); }
     .option.correct { border-color:#22c55e; background: rgba(34,197,94,.12); }
     .option.incorrect { border-color:#ef4444; background: rgba(239,68,68,.12); }
+
     .button { border:none; padding:1rem 1.5rem; border-radius:10px; cursor:pointer; margin:1rem auto; display:block; background:#2563eb; color:#fff; }
     .button:hover { background:#1e40af; }
+
     .progress { height:10px; background:#eee; border-radius:6px; overflow:hidden; margin:1rem 0; }
     .progress > div { height:100%; width:0%; background:#fbbf24; transition: width .3s ease; }
+
     .nav { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
     .nav a { background:#2563eb; color:#fff; padding:.5rem 1rem; border-radius:8px; text-decoration:none; }
     .nav a:hover { background:#1e40af; }
 
-    /* Adaptive toasts + hint modal */
+    /* toast */
     .adaptive-msg{
       position:fixed; left:50%; top:12%; transform:translateX(-50%);
       background:#111827; color:#fff; padding:.6rem 1rem; border-radius:10px;
       box-shadow:0 10px 28px rgba(0,0,0,.25); z-index:9999; font-weight:600;
     }
-    .hint-modal{
+
+    /* hint modal */
+    .hint-overlay{
       position:fixed; inset:0; display:grid; place-items:center; z-index:9998;
       background:rgba(15,23,42,.55);
     }
-    .hint-modal > div{
-      background:#ffffff; color:#111827; width:min(92%,360px);
+    .hint-box{
+      background:#ffffff; color:#111827; width:min(92%,420px);
       border-radius:14px; padding:1.2rem 1.4rem; box-shadow:0 12px 40px rgba(0,0,0,.4);
     }
-    .hint-modal h3{ margin:.2rem 0 .6rem; }
-    .hint-modal .actions{ display:flex; gap:.6rem; justify-content:flex-end; margin-top:.8rem; }
-    .hint-modal button{
-      background:#2563eb; color:#fff; border:0; border-radius:10px; padding:.55rem .9rem; cursor:pointer;
+    .hint-box h3{ margin:.2rem 0 .6rem; }
+    .hint-actions{ display:flex; gap:.6rem; justify-content:flex-end; margin-top:.9rem; }
+    .hint-actions button{
+      background:#2563eb; color:#fff; border:0; border-radius:10px; padding:.55rem .9rem; cursor:pointer; font-weight:600;
     }
-    .hint-modal button.secondary{ background:#e5e7eb; color:#111827; }
+    .hint-actions .secondary{ background:#e5e7eb; color:#111827; }
 
-    /* dim for achievement overlay (if not already in modules.css) */
-    .achv-overlay{
-      position:fixed; inset:0; display:grid; place-items:center; background:rgba(15,23,42,.55); z-index:9997;
-    }
+    /* achievement overlay (fallback) */
+    .achv-overlay{ position:fixed; inset:0; display:grid; place-items:center; background:rgba(15,23,42,.55); z-index:9997; }
 
     @media (prefers-color-scheme: dark){
       body{ background: linear-gradient(135deg,#0f172a,#111827); color:#e5e7eb; }
       .quiz-card{ background:#0b1220; border-color: rgba(255,255,255,.08); }
       .option{ border-color: rgba(255,255,255,.12); }
       .option:hover{ background: rgba(255,255,255,.06); }
-      .hint-modal > div{ background:#0b1220; color:#e6e8ee; }
-      .hint-modal button.secondary{ background:#1f2937; color:#e5e7eb; }
+      .hint-box{ background:#0b1220; color:#e6e8ee; }
+      .hint-actions .secondary{ background:#1f2937; color:#e5e7eb; }
     }
 
-    /* Confetti keyframes */
+    /* confetti keyframes */
     @keyframes confetti-fall {
       0%   { opacity: 1; transform: translate(-50%,-50%) translate(0, 0) rotate(0deg); }
       100% { opacity: 0; transform: translate(-50%,-50%) translate(var(--dx), var(--dy)) rotate(420deg); }
@@ -76,7 +80,6 @@
       <p>Adaptive mode: questions get easier or harder based on how you’re doing.</p>
     </div>
 
-    <!-- Per-run progress -->
     <div class="progress"><div id="progressFill"></div></div>
 
     <div id="quiz"></div>
@@ -92,76 +95,7 @@
   </div>
 
   <script>
-    /* ---------- Inline Adaptive Quiz (no external path issues) ---------- */
-    class AdaptiveQuiz {
-      constructor(questions){
-        this.questions = questions;
-        this.userLevel = "beginner";       // beginner | intermediate | advanced
-        this.consecutiveRight = 0;
-        this.consecutiveWrong = 0;
-        this.hintsUsed = 0;
-        this.maxHints = 3;
-      }
-
-      evaluatePerformance(isCorrect, currentQuestion){
-        if (isCorrect){
-          this.consecutiveRight++;
-          this.consecutiveWrong = 0;
-
-          if (this.consecutiveRight >= 3 && this.userLevel === "beginner"){
-            this.userLevel = "intermediate";
-            this.showMessage("🎯 Nice! Unlocking intermediate questions…");
-          } else if (this.consecutiveRight >= 3 && this.userLevel === "intermediate"){
-            this.userLevel = "advanced";
-            this.showMessage("🔥 You’ve reached advanced difficulty!");
-          }
-        } else {
-          this.consecutiveWrong++;
-          this.consecutiveRight = 0;
-
-          if (this.consecutiveWrong >= 2 && this.hintsUsed < this.maxHints){
-            this.offerHint(currentQuestion);   // show the ACTUAL hint
-          }
-        }
-      }
-
-      getNextQuestion(){
-        const pool = this.questions.filter(q => q.difficulty === this.userLevel);
-        if (pool.length === 0) return this.randomQuestion();
-        return pool[Math.floor(Math.random() * pool.length)];
-      }
-      randomQuestion(){
-        return this.questions[Math.floor(Math.random() * this.questions.length)];
-      }
-
-      showMessage(msg){
-        const note = document.createElement("div");
-        note.className = "adaptive-msg";
-        note.textContent = msg;
-        document.body.appendChild(note);
-        setTimeout(() => note.remove(), 2300);
-      }
-
-      offerHint(currentQuestion){
-        this.hintsUsed++;
-        const overlay = document.createElement("div");
-        overlay.className = "hint-modal";
-        overlay.innerHTML = `
-          <div>
-            <h3>Need a hint? 🤔</h3>
-            <p style="margin-bottom:.8rem;">${currentQuestion?.hint || "Think about the concept again—there’s a clue in the lesson!"}</p>
-            <div class="actions">
-              <button class="secondary" id="hint-close">Close</button>
-            </div>
-          </div>
-        `;
-        document.body.appendChild(overlay);
-        overlay.querySelector("#hint-close")?.addEventListener("click", () => overlay.remove());
-      }
-    }
-    /* ------------------------------------------------------------------- */
-
-    /* ---------------- Confetti + Achievement Modal ---------------- */
+    /* ---------------- Confetti + Achievement ---------------- */
     function confettiBurst(){
       const N=60, colors=["#7B61FF","#7C8CF6","#22C55E","#FBBF24","#EF4444"];
       for(let i=0;i<N;i++){
@@ -185,20 +119,105 @@
       overlay.className = "achv-overlay";
       overlay.innerHTML = `
         <div class="achievement-modal">
-          <div class="emoji">🏆</div>
-          <h3>Achievement Unlocked</h3>
-          <p>Password Pro — you passed the quiz!</p>
-          <button class="achv-close">Nice!</button>
+          <div class="emoji" style="font-size:2rem;text-align:center;margin-bottom:.5rem;">🏆</div>
+          <h3 style="text-align:center;margin:.2rem 0 .4rem;">Achievement Unlocked</h3>
+          <p style="text-align:center;margin:0 0 .8rem;">Password Pro — you passed the quiz!</p>
+          <div style="text-align:center;">
+            <button class="button achv-close" style="padding:.6rem 1.2rem; margin:0 auto;">Nice!</button>
+          </div>
         </div>
       `;
       document.body.appendChild(overlay);
       overlay.querySelector(".achv-close").addEventListener("click", () => overlay.remove());
     }
-    /* ---------------------------------------------------------------- */
 
-    // Question bank WITH difficulty + hint
+    /* ---------------- Adaptive Quiz Engine ---------------- */
+    class AdaptiveQuiz {
+      constructor(questions){
+        this.questions = questions;
+        this.userLevel = "beginner";          // beginner | intermediate | advanced
+        this.consecutiveRight = 0;
+        this.consecutiveWrong = 0;
+        this.hintsUsed = 0;
+        this.maxHints = 3;
+      }
+
+      // choose a non-repeating next question, preferring current level, then neighbors, then any
+      nextQuestion(askedIds){
+        const levels = ["beginner","intermediate","advanced"];
+        const levelIdx = levels.indexOf(this.userLevel);
+
+        // preferred: current level
+        let candidates = this.questions.filter(q => q.difficulty === this.userLevel && !askedIds.has(q.id));
+        if (candidates.length === 0){
+          // try other levels (closest first)
+          const fallbackOrder = [levelIdx-1, levelIdx+1, 0,1,2].filter(i => i>=0 && i<levels.length);
+          for (const idx of fallbackOrder){
+            candidates = this.questions.filter(q => q.difficulty === levels[idx] && !askedIds.has(q.id));
+            if (candidates.length) break;
+          }
+        }
+        // final fallback: any not asked
+        if (candidates.length === 0){
+          candidates = this.questions.filter(q => !askedIds.has(q.id));
+        }
+        // none left
+        if (candidates.length === 0) return null;
+
+        return candidates[Math.floor(Math.random()*candidates.length)];
+      }
+
+      evaluatePerformance(isCorrect, currentQuestion){
+        if (isCorrect){
+          this.consecutiveRight++;
+          this.consecutiveWrong = 0;
+
+          if (this.consecutiveRight >= 3 && this.userLevel === "beginner"){
+            this.userLevel = "intermediate";
+            this.toast("🎯 Nice! Unlocking intermediate questions…");
+          } else if (this.consecutiveRight >= 3 && this.userLevel === "intermediate"){
+            this.userLevel = "advanced";
+            this.toast("🔥 You’ve reached advanced difficulty!");
+          }
+        } else {
+          this.consecutiveWrong++;
+          this.consecutiveRight = 0;
+
+          if (this.consecutiveWrong >= 2 && this.hintsUsed < this.maxHints){
+            this.showHint(currentQuestion);
+          }
+        }
+      }
+
+      toast(msg){
+        const t = document.createElement("div");
+        t.className = "adaptive-msg";
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(()=> t.remove(), 2300);
+      }
+
+      showHint(currentQuestion){
+        this.hintsUsed++;
+        const overlay = document.createElement("div");
+        overlay.className = "hint-overlay";
+        overlay.innerHTML = `
+          <div class="hint-box">
+            <h3>Need a hint? 🤔</h3>
+            <p style="margin:.2rem 0 .6rem;">${currentQuestion?.hint || "Think about the concept again—there’s a clue in the lesson!"}</p>
+            <div class="hint-actions">
+              <button class="secondary" id="hint-close">Close</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        overlay.querySelector("#hint-close").addEventListener("click", () => overlay.remove());
+      }
+    }
+
+    /* ---------------- Question Bank ---------------- */
     const quizData = [
-      { id:1, difficulty:'beginner', text:"What's the minimum recommended password length?", options:["6","8","12","20"], answer:2, hint:"Longer = stronger. Aim for 12+." , x:"12+ characters is the modern baseline for strong passwords." },
+      { id:1, difficulty:'beginner', text:"What's the minimum recommended password length?", options:["6","8","12","20"], answer:2, hint:"Longer = stronger. Aim for 12+.", x:"12+ characters is the modern baseline for strong passwords." },
       { id:2, difficulty:'beginner', text:"2FA stands for…", options:["Two-Factor Authentication","Two-File Access","Total Factor Authorization","Trusted Friend Access"], answer:0, hint:"It’s a second factor beyond the password.", x:"A second factor (something you have/are) added to your password (something you know)." },
       { id:3, difficulty:'beginner', text:"Using the same strong password on all sites is safe.", options:["True","False"], answer:1, hint:"If one site is breached, others fall like dominos.", x:"If one site is breached, attackers try the same password everywhere." },
 
@@ -210,32 +229,18 @@
       { id:8, difficulty:'advanced', text:"Which accounts should have 2FA at minimum?", options:["Email","Banking","Social media","All of the above"], answer:3, hint:"Protect the keys to your identity + money.", x:"Enable 2FA anywhere possible, especially email, banking, and socials." },
       { id:9, difficulty:'advanced', text:"Browser password managers are always equal to dedicated ones.", options:["True","False"], answer:1, hint:"Dedicated tools usually have stronger features.", x:"Dedicated managers usually have stronger features and cross-platform support." },
 
-      // ensure enough pool
       { id:10, difficulty:'intermediate', text:"Best practice for passphrases:", options:["Short + complex","Long + random words","All symbols","Uppercase only"], answer:1, hint:"Think memorability + entropy.", x:"Long passphrases with unrelated words are both strong and memorable." }
     ];
 
-    // Adaptive engine instance
+    /* ---------------- Quiz Runtime ---------------- */
     const aq = new AdaptiveQuiz(quizData);
 
-    // quiz run-state
-    const TOTAL_QUESTIONS = 10; // how many to ask this run
-    let count = 0;              // asked so far
+    const TOTAL_QUESTIONS = 10;   // how many in one run
+    let count = 0;
     let score = 0;
     let answered = false;
     let currentQ = null;
     const askedIds = new Set();
-
-    function pickNextQuestion(){
-      let tries = 0;
-      let q;
-      do {
-        q = aq.getNextQuestion();
-        tries++;
-        if (tries > 50) break;
-      } while (askedIds.has(q.id));
-      askedIds.add(q.id);
-      return q;
-    }
 
     function updateQuizProgress(){
       const pct = Math.round((count / TOTAL_QUESTIONS) * 100);
@@ -280,7 +285,7 @@
       }
       fb.style.display = "block";
 
-      // Adaptive engine update WITH context for hint
+      // feed performance + current question (for its hint)
       aq.evaluatePerformance(isCorrect, currentQ);
     }
 
@@ -290,7 +295,15 @@
         finish();
         return;
       }
-      currentQ = pickNextQuestion();
+
+      // pick a new, not-yet-asked question
+      currentQ = aq.nextQuestion(askedIds);
+      if (!currentQ){
+        // no questions left (safety) — end now
+        finish();
+        return;
+      }
+      askedIds.add(currentQ.id);
       loadQ();
     }
 
@@ -316,15 +329,20 @@
         <button class="button" onclick="location.reload()">Try Again</button>
       `;
 
-      // hide quiz UI
       document.getElementById("quiz").style.display = "none";
       document.getElementById("nextBtn").style.display = "none";
       document.getElementById("finishBtn").style.display = "none";
       document.getElementById("progressFill").style.width = "100%";
     }
 
+    // init
     document.addEventListener("DOMContentLoaded", () => {
-      currentQ = pickNextQuestion();
+      currentQ = aq.nextQuestion(askedIds);
+      if (!currentQ){
+        document.getElementById('quiz').innerHTML = "<p>Question bank is empty.</p>";
+        return;
+      }
+      askedIds.add(currentQ.id);
       loadQ();
     });
   </script>
