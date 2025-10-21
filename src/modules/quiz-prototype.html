@@ -46,9 +46,13 @@
     .hint-modal button{
       background:#2563eb; color:#fff; border:0; border-radius:10px; padding:.55rem .9rem; cursor:pointer;
     }
-    .hint-modal button.secondary{
-      background:#e5e7eb; color:#111827;
+    .hint-modal button.secondary{ background:#e5e7eb; color:#111827; }
+
+    /* dim for achievement overlay (if not already in modules.css) */
+    .achv-overlay{
+      position:fixed; inset:0; display:grid; place-items:center; background:rgba(15,23,42,.55); z-index:9997;
     }
+
     @media (prefers-color-scheme: dark){
       body{ background: linear-gradient(135deg,#0f172a,#111827); color:#e5e7eb; }
       .quiz-card{ background:#0b1220; border-color: rgba(255,255,255,.08); }
@@ -58,7 +62,7 @@
       .hint-modal button.secondary{ background:#1f2937; color:#e5e7eb; }
     }
 
-    /* Confetti keyframes used by confettiBurst() */
+    /* Confetti keyframes */
     @keyframes confetti-fall {
       0%   { opacity: 1; transform: translate(-50%,-50%) translate(0, 0) rotate(0deg); }
       100% { opacity: 0; transform: translate(-50%,-50%) translate(var(--dx), var(--dy)) rotate(420deg); }
@@ -98,10 +102,12 @@
         this.hintsUsed = 0;
         this.maxHints = 3;
       }
-      evaluatePerformance(isCorrect){
+
+      evaluatePerformance(isCorrect, currentQuestion){
         if (isCorrect){
           this.consecutiveRight++;
           this.consecutiveWrong = 0;
+
           if (this.consecutiveRight >= 3 && this.userLevel === "beginner"){
             this.userLevel = "intermediate";
             this.showMessage("🎯 Nice! Unlocking intermediate questions…");
@@ -112,11 +118,13 @@
         } else {
           this.consecutiveWrong++;
           this.consecutiveRight = 0;
+
           if (this.consecutiveWrong >= 2 && this.hintsUsed < this.maxHints){
-            this.offerHint();
+            this.offerHint(currentQuestion);   // show the ACTUAL hint
           }
         }
       }
+
       getNextQuestion(){
         const pool = this.questions.filter(q => q.difficulty === this.userLevel);
         if (pool.length === 0) return this.randomQuestion();
@@ -125,6 +133,7 @@
       randomQuestion(){
         return this.questions[Math.floor(Math.random() * this.questions.length)];
       }
+
       showMessage(msg){
         const note = document.createElement("div");
         note.className = "adaptive-msg";
@@ -132,23 +141,22 @@
         document.body.appendChild(note);
         setTimeout(() => note.remove(), 2300);
       }
-      offerHint(){
+
+      offerHint(currentQuestion){
         this.hintsUsed++;
         const overlay = document.createElement("div");
         overlay.className = "hint-modal";
         overlay.innerHTML = `
           <div>
             <h3>Need a hint? 🤔</h3>
-            <p>You’ve missed two in a row. Here’s a small nudge for this topic.</p>
+            <p style="margin-bottom:.8rem;">${currentQuestion?.hint || "Think about the concept again—there’s a clue in the lesson!"}</p>
             <div class="actions">
-              <button class="secondary" id="hint-cancel">No Thanks</button>
-              <button id="hint-ok">Show Hint (${Math.max(0, this.maxHints - this.hintsUsed)} left)</button>
+              <button class="secondary" id="hint-close">Close</button>
             </div>
           </div>
         `;
         document.body.appendChild(overlay);
-        overlay.querySelector("#hint-cancel")?.addEventListener("click", () => overlay.remove());
-        overlay.querySelector("#hint-ok")?.addEventListener("click", () => overlay.remove());
+        overlay.querySelector("#hint-close")?.addEventListener("click", () => overlay.remove());
       }
     }
     /* ------------------------------------------------------------------- */
@@ -272,8 +280,8 @@
       }
       fb.style.display = "block";
 
-      // Adaptive engine update
-      aq.evaluatePerformance(isCorrect);
+      // Adaptive engine update WITH context for hint
+      aq.evaluatePerformance(isCorrect, currentQ);
     }
 
     function nextQ(){
