@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Password Security Quiz</title>
+  <title>Password Security Quiz (Adaptive)</title>
 
   <!-- Shared styles/scripts (same folder as this file) -->
   <link rel="stylesheet" href="./modules.css" />
@@ -14,7 +14,7 @@
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; padding: 2rem; }
     .container { max-width: 800px; margin: 0 auto; }
     .header { text-align: center; margin-bottom: 1.5rem; }
-    .quiz-card { border:1px solid rgba(0,0,0,.1); border-radius:14px; padding:1rem; margin:1rem 0; }
+    .quiz-card { border:1px solid rgba(0,0,0,.1); border-radius:14px; padding:1rem; margin:1rem 0; background:#fff; }
     .option { border:1px solid rgba(0,0,0,.12); border-radius:10px; padding:1rem; cursor:pointer; margin:.5rem 0; }
     .option:hover { background: rgba(0,0,0,.04); }
     .option.correct { border-color:#22c55e; background: rgba(34,197,94,.12); }
@@ -26,17 +26,43 @@
     .nav { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
     .nav a { background:#2563eb; color:#fff; padding:.5rem 1rem; border-radius:8px; text-decoration:none; }
     .nav a:hover { background:#1e40af; }
+
+    /* Adaptive toasts + hint modal (lightweight styles) */
+    .adaptive-msg{
+      position:fixed; left:50%; top:12%; transform:translateX(-50%);
+      background:#111827; color:#fff; padding:.6rem 1rem; border-radius:10px;
+      box-shadow:0 10px 28px rgba(0,0,0,.25); z-index:9999; font-weight:600;
+    }
+    .hint-modal{
+      position:fixed; inset:0; display:grid; place-items:center; z-index:9998;
+      background:rgba(15,23,42,.55);
+    }
+    .hint-modal > div{
+      background:#ffffff; color:#111827; width:min(92%,360px);
+      border-radius:14px; padding:1.2rem 1.4rem; box-shadow:0 12px 40px rgba(0,0,0,.4);
+    }
+    .hint-modal h3{ margin:.2rem 0 .6rem; }
+    .hint-modal button{
+      background:#2563eb; color:#fff; border:0; border-radius:10px; padding:.55rem .9rem; cursor:pointer;
+    }
+    @media (prefers-color-scheme: dark){
+      body{ background: linear-gradient(135deg,#0f172a,#111827); color:#e5e7eb; }
+      .quiz-card{ background:#0b1220; border-color: rgba(255,255,255,.08); }
+      .option{ border-color: rgba(255,255,255,.12); }
+      .option:hover{ background: rgba(255,255,255,.06); }
+      .hint-modal > div{ background:#0b1220; color:#e6e8ee; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <h1>🔒 Password Security Quiz</h1>
-      <p>Module 1 — Test your knowledge</p>
+      <p>Adaptive mode: questions get easier or harder based on how you’re doing.</p>
     </div>
 
-    <!-- Module progress (overall) -->
-    <div class="progress"><div id="moduleProgress"></div></div>
+    <!-- Quiz progress (per-question) -->
+    <div class="progress"><div id="progressFill"></div></div>
 
     <div id="quiz"></div>
 
@@ -49,6 +75,9 @@
       <a href="./module1.html">← Back to Module 1</a>
     </div>
   </div>
+
+  <!-- 1) Load adaptive engine AFTER modules.js (so it can coexist) -->
+  <script src="../js/adaptive-quiz.js"></script>
 
   <script>
     /* ---------------- Confetti + Achievement Modal ---------------- */
@@ -70,9 +99,7 @@
         setTimeout(()=>s.remove(),1200);
       }
     }
-
     function showAchievement(){
-      // overlay + modal with classes your CSS targets
       const overlay = document.createElement("div");
       overlay.className = "achv-overlay";
       overlay.innerHTML = `
@@ -88,87 +115,119 @@
     }
     /* ---------------------------------------------------------------- */
 
-    // 10-question bank
+    // 2) Question bank WITH difficulty + hint (beginner / intermediate / advanced)
     const quizData = [
-      { q: "What's the minimum recommended password length?", opts: ["6","8","12","20"], a: 2, x: "12+ characters is the modern baseline for strong passwords." },
-      { q: "Which password is strongest?", opts: ["JohnDoe123","P@ssw0rd!","correct-horse-battery-staple","iloveyou"], a: 2, x: "Long random passphrases are hardest to crack and easier to remember." },
-      { q: "2FA stands for…", opts: ["Two-Factor Authentication","Two-File Access","Total Factor Authorization","Trusted Friend Access"], a:0, x:"A second factor (something you have/are) added to your password (something you know)." },
-      { q: "Using the same strong password on all sites is safe.", opts:["True","False"], a:1, x:"If one site is breached, attackers try the same password everywhere." },
-      { q: "Which is the BEST type of 2FA?", opts:["SMS codes","Email codes","Authenticator app","Hardware key"], a:3, x:"Hardware security keys resist phishing and SIM-swaps; apps are second-best." },
-      { q: "A password manager primarily helps by…", opts:["Sending password resets","Storing/generating unique passwords securely","Creating accounts for you","Blocking phishing emails"], a:1, x:"Use it to generate and store unique passwords for every site." },
-      { q: "‘password123’ is weak mainly because…", opts:["It has numbers","It’s too short and common","It uses only lowercase","It’s hard to type"], a:1, x:"Common words + predictable numbers are first in attacker wordlists." },
-      { q: "Why is 'correct-horse-battery-staple-2025' strong?", opts:["It uses symbols","It’s long and less predictable","It’s all caps","It has your birth year"], a:1, x:"Length dominates strength—several unrelated words expand the search space." },
-      { q: "Which accounts should have 2FA at minimum?", opts:["Email","Banking","Social media","All of the above"], a:3, x:"Enable 2FA anywhere possible, especially email, banking, and socials." },
-      { q: "Browser password managers are always equal to dedicated ones.", opts:["True","False"], a:1, x:"Dedicated managers usually have stronger features and cross-platform support." }
+      { id:1, difficulty:'beginner', text:"What's the minimum recommended password length?", options:["6","8","12","20"], answer:2, hint:"Longer = stronger. Aim for 12+." , x:"12+ characters is the modern baseline for strong passwords." },
+      { id:2, difficulty:'beginner', text:"2FA stands for…", options:["Two-Factor Authentication","Two-File Access","Total Factor Authorization","Trusted Friend Access"], answer:0, hint:"It’s about adding a second factor beyond the password.", x:"A second factor (something you have/are) added to your password (something you know)." },
+      { id:3, difficulty:'beginner', text:"Using the same strong password on all sites is safe.", options:["True","False"], answer:1, hint:"If one site is breached, others fall like dominos.", x:"If one site is breached, attackers try the same password everywhere." },
+
+      { id:4, difficulty:'intermediate', text:"Which is the BEST type of 2FA?", options:["SMS codes","Email codes","Authenticator app","Hardware key"], answer:3, hint:"Think: phishing-resistant, physical device.", x:"Hardware security keys resist phishing and SIM-swaps; apps are second-best." },
+      { id:5, difficulty:'intermediate', text:"A password manager primarily helps by…", options:["Sending password resets","Storing/generating unique passwords securely","Creating accounts for you","Blocking phishing emails"], answer:1, hint:"It’s a secure vault + generator.", x:"Use it to generate and store unique passwords for every site." },
+      { id:6, difficulty:'intermediate', text:"‘password123’ is weak mainly because…", options:["It has numbers","It’s too short and common","It uses only lowercase","It’s hard to type"], answer:1, hint:"Attackers guess common + predictable combos first.", x:"Common words + predictable numbers are first in attacker wordlists." },
+
+      { id:7, difficulty:'advanced', text:"Why is 'correct-horse-battery-staple-2025' strong?", options:["It uses symbols","It’s long and less predictable","It’s all caps","It has your birth year"], answer:1, hint:"Search space grows with random, unrelated words.", x:"Length dominates strength—several unrelated words expand the search space." },
+      { id:8, difficulty:'advanced', text:"Which accounts should have 2FA at minimum?", options:["Email","Banking","Social media","All of the above"], answer:3, hint:"Protect the keys to your identity + money.", x:"Enable 2FA anywhere possible, especially email, banking, and socials." },
+      { id:9, difficulty:'advanced', text:"Browser password managers are always equal to dedicated ones.", options:["True","False"], answer:1, hint:"Dedicated tools usually have stronger features.", x:"Dedicated managers usually have stronger features and cross-platform support." },
+
+      // one bonus to ensure enough pool
+      { id:10, difficulty:'intermediate', text:"Best practice for passphrases:", options:["Short + complex","Long + random words","All symbols","Uppercase only"], answer:1, hint:"Think about memorability + entropy.", x:"Long passphrases with unrelated words are both strong and memorable." }
     ];
 
-    let i = 0;
+    // 3) Adaptive engine instance
+    const aq = new AdaptiveQuiz(quizData);
+
+    // quiz run-state
+    const TOTAL_QUESTIONS = 10; // how many to ask this run
+    let count = 0;              // asked so far
     let score = 0;
     let answered = false;
+    let currentQ = null;
+    const askedIds = new Set();
 
-    function updateModuleProgress(){
-      const fill = document.getElementById("moduleProgress");
-      if (window.SS && fill) fill.style.width = SS.progressPercent() + "%";
+    // pick next question guided by adaptive engine (no repeats)
+    function pickNextQuestion(){
+      let tries = 0;
+      let q;
+      do {
+        q = aq.getNextQuestion();
+        tries++;
+        if (tries > 50) break; // fallback safety
+      } while (askedIds.has(q.id));
+      askedIds.add(q.id);
+      return q;
+    }
+
+    function updateQuizProgress(){
+      const pct = Math.round((count / TOTAL_QUESTIONS) * 100);
+      document.getElementById("progressFill").style.width = pct + "%";
     }
 
     function loadQ(){
-      const q = quizData[i];
-      const root = document.getElementById("quiz");
+      if (count === 0){
+        currentQ = pickNextQuestion();
+      }
+      const root = document.getElementById('quiz');
       let html = `
         <div class="quiz-card">
-          <div><strong>Question ${i+1} of ${quizData.length}</strong></div>
-          <p style="margin:.6rem 0 1rem">${q.q}</p>
+          <div><strong>Question ${count + 1} of ${TOTAL_QUESTIONS}</strong> <span style="opacity:.7">(${currentQ.difficulty})</span></div>
+          <p style="margin:.6rem 0 1rem">${currentQ.text}</p>
       `;
-      q.opts.forEach((opt, idx) => {
+      currentQ.options.forEach((opt, idx) => {
         html += `<div class="option" onclick="selectA(${idx})">${String.fromCharCode(65+idx)}) ${opt}</div>`;
       });
       html += `<div id="fb" style="margin-top:.8rem;display:none"></div></div>`;
       root.innerHTML = html;
 
-      document.getElementById("nextBtn").style.display = (i < quizData.length - 1) ? "block" : "none";
-      document.getElementById("finishBtn").style.display = (i === quizData.length - 1) ? "block" : "none";
+      document.getElementById("nextBtn").style.display = (count < TOTAL_QUESTIONS - 1) ? "block" : "none";
+      document.getElementById("finishBtn").style.display = (count === TOTAL_QUESTIONS - 1) ? "block" : "none";
       answered = false;
+      updateQuizProgress();
     }
 
     function selectA(idx){
       if (answered) return;
       answered = true;
-      const q = quizData[i];
+
       const opts = document.querySelectorAll(".option");
       const fb = document.getElementById("fb");
+      const isCorrect = (idx === currentQ.answer);
 
-      if (idx === q.a){
+      if (isCorrect) {
         opts[idx].classList.add("correct");
-        fb.textContent = "✅ Correct. " + q.x;
+        fb.textContent = "✅ Correct. " + (currentQ.x || "");
         score += 10;
       } else {
         opts[idx].classList.add("incorrect");
-        opts[q.a].classList.add("correct");
-        fb.textContent = "❌ Not quite. " + q.x;
+        opts[currentQ.answer].classList.add("correct");
+        fb.textContent = "❌ Not quite. " + (currentQ.x || "");
       }
       fb.style.display = "block";
+
+      // Tell the adaptive engine how we did
+      aq.evaluatePerformance(isCorrect);
     }
 
-    function nextQ(){ i++; loadQ(); }
+    function nextQ(){
+      // advance counter, pick next based on current level
+      count++;
+      currentQ = pickNextQuestion();
+      loadQ();
+    }
 
     function finish(){
-      const total = quizData.length * 10;
+      const total = TOTAL_QUESTIONS * 10;
       const pct = Math.round((score / total) * 100);
 
-      // Points integration (guard if SS exists)
       if (window.SS){
         if (pct >= 70) SS.awardPoints(50); // pass bonus
         if (pct === 100) SS.awardPoints(25); // perfect bonus
         SS.setQuizScore(score);
       }
 
-      // Confetti + achievement when passed
       if (pct >= 70){
         confettiBurst();
         showAchievement();
       }
-
-      updateModuleProgress();
 
       const r = document.getElementById("results");
       r.style.display = "block";
@@ -181,12 +240,13 @@
       document.getElementById("quiz").style.display = "none";
       document.getElementById("nextBtn").style.display = "none";
       document.getElementById("finishBtn").style.display = "none";
-      // visual closure
-      document.getElementById("moduleProgress").style.width = "100%";
+      document.getElementById("progressFill").style.width = "100%";
     }
 
+    // boot
     document.addEventListener("DOMContentLoaded", () => {
-      updateModuleProgress();
+      // first question is picked inside loadQ (via pickNextQuestion if count===0)
+      currentQ = pickNextQuestion();
       loadQ();
     });
   </script>
