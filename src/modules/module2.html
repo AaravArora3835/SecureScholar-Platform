@@ -22,6 +22,8 @@
       font-weight:600; letter-spacing:0.2px; text-decoration:none; display:inline-block;
     }
     .btn.secondary{ color:var(--muted); border-color: rgba(255,255,255,0.03); background:rgba(255,255,255,0.01); }
+    .btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+    .btn.primary:hover{ background:#1e8fd6; }
     .lesson{ display:none; padding:14px; margin-top:12px; border-radius:10px; background:rgba(255,255,255,0.01);}
     .lesson.active{ display:block; }
     .lesson h2{ margin-top:0; }
@@ -36,14 +38,14 @@
   <div class="container">
     <header>
       <div>
-        <h1>Module 2 — Phishing Defense (Draft)</h1>
-        <div class="meta">SecureScholar • Module 2 • Draft — 2 lessons</div>
+        <h1>Module 2 — Phishing Defense</h1>
+        <div class="meta">SecureScholar • Module 2 • 1 of 4 lessons complete</div>
       </div>
 
       <nav class="controls">
         <button id="prevBtn" class="btn secondary" title="Previous lesson">← Prev</button>
         <button id="nextBtn" class="btn" title="Next lesson">Next →</button>
-        <button id="quizBtn" class="btn secondary" title="Take Quiz (placeholder)">Quiz (Coming Soon)</button>
+        <button id="quizBtn" class="btn secondary" title="Take Quiz">Take Quiz</button>
       </nav>
     </header>
 
@@ -83,12 +85,12 @@
       </section>
 
       <div id="editorHint" style="margin-top:12px; font-size:0.9rem; color:var(--muted);">
-        Tip: Lesson 1 complete. Lesson 2 draft coming Week 3.
+        💡 <span id="hintText">Review Lesson 1, then try the quiz to test your knowledge!</span>
       </div>
 
       <footer class="metafoot">
         <div>Module progress: <strong id="progressText">1 / 2</strong></div>
-        <div>Last saved: <span id="lastSaved">Draft</span></div>
+        <div>Last saved: <span id="lastSaved">Nov 8, 2025</span></div>
       </footer>
     </main>
 
@@ -109,12 +111,19 @@
       const quizBtn = document.getElementById('quizBtn');
       const progressText = document.getElementById('progressText');
       const lastSaved = document.getElementById('lastSaved');
+      const hintText = document.getElementById('hintText');
 
       function show(idx){
         lessons.forEach((s,i) => s.classList.toggle('active', i === idx));
         current = idx;
         progressText.textContent = (current+1) + ' / ' + lessons.length;
-        lastSaved.textContent = 'Draft';
+        
+        // Update hint based on current lesson
+        if(current === 0) {
+          hintText.textContent = 'Review Lesson 1, then try the quiz to test your knowledge!';
+        } else {
+          hintText.textContent = 'Lesson 2 coming Week 3. For now, quiz covers Lesson 1 material.';
+        }
       }
 
       prevBtn.addEventListener('click', () => {
@@ -128,23 +137,38 @@
       });
 
       quizBtn.addEventListener('click', () => {
-        if(current < lessons.length - 1) {
-          alert('Complete all lessons first to unlock the quiz.');
+        // Allow quiz access after viewing Lesson 1
+        if(current === 0) {
+          // User is on Lesson 1 - they can take the quiz
+          window.location.href = 'module2-quiz.html';
+        } else if(current === 1) {
+          // User is on Lesson 2 (placeholder) - warn but allow quiz
+          const proceed = confirm('Lesson 2 is still under development. Quiz currently covers Lesson 1 material only. Proceed anyway?');
+          if(proceed) {
+            window.location.href = 'module2-quiz.html';
+          }
         } else {
-          alert('Module 2 quiz under development — check back Week 3!');
+          // Fallback
+          window.location.href = 'module2-quiz.html';
         }
       });
 
+      // Keyboard shortcuts
       window.addEventListener('keydown', (e) => {
         if(e.key === 'ArrowLeft') prevBtn.click();
         if(e.key === 'ArrowRight') nextBtn.click();
       });
 
+      // Autosave timestamp
       window.addEventListener('beforeunload', () => {
         localStorage.setItem('module2_last', new Date().toISOString());
       });
+      
       const saved = localStorage.getItem('module2_last');
-      if(saved) lastSaved.textContent = 'Autosaved ' + new Date(saved).toLocaleString();
+      if(saved) {
+        const date = new Date(saved);
+        lastSaved.textContent = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
     })();
   </script>
 </body>
