@@ -136,21 +136,9 @@
         show(idx);
       });
 
+      // FIXED: Simple direct navigation - no popups
       quizBtn.addEventListener('click', () => {
-        // Allow quiz access after viewing Lesson 1
-        if(current === 0) {
-          // User is on Lesson 1 - they can take the quiz
-          window.location.href = 'module2-quiz.html';
-        } else if(current === 1) {
-          // User is on Lesson 2 (placeholder) - warn but allow quiz
-          const proceed = confirm('Lesson 2 is still under development. Quiz currently covers Lesson 1 material only. Proceed anyway?');
-          if(proceed) {
-            window.location.href = 'module2-quiz.html';
-          }
-        } else {
-          // Fallback
-          window.location.href = 'module2-quiz.html';
-        }
+        window.location.href = 'module2-quiz.html';
       });
 
       // Keyboard shortcuts
