@@ -25,6 +25,7 @@
     .lesson{ display:none; padding:14px; margin-top:12px; border-radius:10px; background:rgba(255,255,255,0.01);}
     .lesson.active{ display:block; }
     .lesson h2{ margin-top:0; }
+    .lesson p{ line-height:1.7; margin:0.8rem 0; }
     .placeholder{ color:var(--muted); font-size:0.95rem; background:rgba(255,255,255,0.01); padding:10px; border-radius:8px; }
     footer.metafoot{ margin-top:18px; display:flex; justify-content:space-between; color:var(--muted); font-size:0.9rem; }
     .note { margin-top:12px; padding:12px; border-left:3px solid rgba(46,163,255,0.18); background: rgba(46,163,255,0.02); color: #dff3ff; border-radius:8px; }
@@ -35,45 +36,54 @@
   <div class="container">
     <header>
       <div>
-        <h1>Module 2 — Network Threats (Draft)</h1>
+        <h1>Module 2 — Phishing Defense (Draft)</h1>
         <div class="meta">SecureScholar • Module 2 • Draft — 2 lessons</div>
       </div>
 
       <nav class="controls">
         <button id="prevBtn" class="btn secondary" title="Previous lesson">← Prev</button>
         <button id="nextBtn" class="btn" title="Next lesson">Next →</button>
-        <button id="quizBtn" class="btn secondary" title="Take Quiz (placeholder)">Take Quiz</button>
+        <button id="quizBtn" class="btn secondary" title="Take Quiz (placeholder)">Quiz (Coming Soon)</button>
       </nav>
     </header>
 
     <main class="card" id="moduleCard">
       <!-- Lesson 1 -->
       <section id="lesson-1" class="lesson active" data-lesson="1">
-        <h2>Lesson 1 — Types of Network Threats</h2>
-        <p class="placeholder">(Draft) Add a beginner-friendly explanation of DDoS, MITM, Sniffing, Spoofing, and Port Scanning. Aim for ~200-300 words. Include an example & screenshots from lab.</p>
+        <h2>Lesson 1 — What is Phishing?</h2>
+        
+        <p>Imagine getting an email that says your Netflix account will be deleted unless you "verify your payment information" in the next 24 hours. You click the link, enter your credit card details, and… congratulations, you just got phished.</p>
+
+        <p><strong>Phishing</strong> is when someone pretends to be a trusted company, friend, or authority figure to trick you into giving them sensitive information—like passwords, credit card numbers, or Social Security numbers. It's called "phishing" because hackers cast a wide net hoping someone will bite the bait.</p>
+
+        <p>And it works. According to the Verizon Data Breach Investigations Report, <strong>36% of all data breaches involve phishing</strong>. That's more than one in three cyberattacks. Why? Because phishing targets the weakest link in any security system: humans.</p>
+
+        <p>Here's a real example: You get a text saying "Your package can't be delivered. Click here to reschedule." It looks legitimate—there's even a tracking number. But the link takes you to a fake website designed to steal your information. Within minutes, hackers have access to your accounts.</p>
+
+        <p>So why do smart people fall for this? <strong>Psychology.</strong> Phishing emails use urgency ("Act now or lose access!"), authority ("This is your IT department"), and fear ("Suspicious activity detected"). When you're stressed or distracted, your brain takes shortcuts—and that's exactly when phishing works.</p>
+
+        <p>The good news? Once you know what to look for, phishing becomes much easier to spot. And that's what this module is all about: giving you the tools to protect yourself, your family, and your digital identity.</p>
 
         <div class="note">
           <strong>Aarav's Note:</strong>
-          <p style="margin:6px 0 0 0">Personal example / anecdote goes here — why this threat matters and what students should watch for.</p>
+          <p style="margin:6px 0 0 0">I almost fell for a phishing email last year. It looked exactly like a message from my school's IT department, asking me to "verify my student portal login." The email address was perfect, the logo looked right, and I was stressed about an assignment deadline. I hovered over the link at the last second and noticed the URL was totally different from our school's actual website—it was some random .com domain instead of our .edu address.</p>
+          <p style="margin:6px 0 0 0">That one moment of checking saved me from giving hackers my school login, which would've exposed my grades, personal info, and possibly my family's data if I reused that password anywhere else. Now I <em>always</em> hover before I click. It takes two extra seconds, but it's the easiest way to catch fake emails.</p>
         </div>
       </section>
 
       <!-- Lesson 2 -->
       <section id="lesson-2" class="lesson" data-lesson="2">
-        <h2>Lesson 2 — Basic Defensive Controls</h2>
-        <p class="placeholder">(Draft) Add a short lesson on patching, least privilege, firewalls, and IDS/IPS. Provide 3 practical "what to do" steps students can take right away.</p>
+        <h2>Lesson 2 — Types of Phishing</h2>
+        <p class="placeholder">(Draft) Add content about email phishing, spear phishing, smishing, and vishing. Include examples students might encounter. Target: 250 words.</p>
 
-        <div style="margin-top:12px;">
-          <strong>Evidence / Lab</strong>
-          <ul>
-            <li>Reference `2025-11-04_Tool_Commands_Tested.png` for a local nmap example (network discovery).</li>
-            <li>Add a short exercise: run `nmap -sn 127.0.0.1` inside a lab VM and observe results.</li>
-          </ul>
+        <div class="note">
+          <strong>Aarav's Note:</strong>
+          <p style="margin:6px 0 0 0">Personal insight about which type is hardest to spot and why.</p>
         </div>
       </section>
 
       <div id="editorHint" style="margin-top:12px; font-size:0.9rem; color:var(--muted);">
-        Tip: Replace the placeholder text with your lesson content. For consistent styling, copy classes from Module 1 CSS if available.
+        Tip: Lesson 1 complete. Lesson 2 draft coming Week 3.
       </div>
 
       <footer class="metafoot">
@@ -113,7 +123,11 @@
       });
 
       quizBtn.addEventListener('click', () => {
-        alert('Quiz placeholder — integrate quiz.js when ready.');
+        if(current < lessons.length - 1) {
+          alert('Complete all lessons first to unlock the quiz.');
+        } else {
+          alert('Module 2 quiz under development — check back Week 3!');
+        }
       });
 
       window.addEventListener('keydown', (e) => {
