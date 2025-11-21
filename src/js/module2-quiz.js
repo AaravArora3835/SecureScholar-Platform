@@ -41,6 +41,11 @@ const module2Questions = [
 
 // State
 let currentQuestionIndex = 0;
+let selectedOptionIndex = null;
+let score = 0;
+
+// Passing threshold (e.g., 75% of questions)
+const passingScore = Math.ceil(module2Questions.length * 0.75);
 
 // DOM elements
 const questionContainer = document.getElementById('quiz-question');
@@ -51,10 +56,14 @@ const questionCounter = document.getElementById('question-counter');
 // Render current question
 function renderQuestion() {
   const q = module2Questions[currentQuestionIndex];
-  
+
+  // Reset selection state for the new question
+  selectedOptionIndex = null;
+  nextButton.disabled = true;
+
   // Update question text
   questionContainer.textContent = q.text;
-  
+
   // Clear and rebuild options
   optionsContainer.innerHTML = '';
   q.options.forEach((option, index) => {
@@ -64,10 +73,10 @@ function renderQuestion() {
     button.onclick = () => selectOption(index);
     optionsContainer.appendChild(button);
   });
-  
+
   // Update counter
   questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${module2Questions.length}`;
-  
+
   // Update Next button
   if (currentQuestionIndex === module2Questions.length - 1) {
     nextButton.textContent = 'Finish Quiz';
@@ -76,29 +85,79 @@ function renderQuestion() {
   }
 }
 
-// Handle option selection (visual feedback only, no scoring yet)
+// Handle option selection
 function selectOption(index) {
   const buttons = optionsContainer.querySelectorAll('.quiz-option');
   buttons.forEach(btn => btn.classList.remove('selected'));
   buttons[index].classList.add('selected');
+  selectedOptionIndex = index;
   nextButton.disabled = false;
 }
 
 // Move to next question
 function nextQuestion() {
-  if (currentQuestionIndex < module2Questions.length - 1) {
-    currentQuestionIndex++;
-    nextButton.disabled = true;
-    renderQuestion();
+  const currentQuestion = module2Questions[currentQuestionIndex];
+  if (selectedOptionIndex === null) {
+    return;
+  }
+
+  const isCorrect = selectedOptionIndex === currentQuestion.answer;
+  if (isCorrect) {
+    score += 1;
+  }
+
+  revealAnswerFeedback(isCorrect, currentQuestion.answer, selectedOptionIndex);
+
+  // Prevent multiple submissions while showing feedback
+  nextButton.disabled = true;
+
+  const proceed = () => {
+    if (currentQuestionIndex < module2Questions.length - 1) {
+      currentQuestionIndex++;
+      renderQuestion();
+    } else {
+      finishQuiz();
+    }
+  };
+
+  // Brief pause when incorrect so the learner can see the correct answer
+  if (isCorrect) {
+    proceed();
   } else {
-    finishQuiz();
+    setTimeout(proceed, 650);
   }
 }
 
-// Finish quiz (placeholder for now)
+// Highlight the correct answer and optionally the incorrect choice
+function revealAnswerFeedback(isCorrect, correctIndex, selectedIndex) {
+  const buttons = optionsContainer.querySelectorAll('.quiz-option');
+  buttons.forEach((btn, index) => {
+    if (index === correctIndex) {
+      btn.classList.add('correct');
+    }
+
+    if (!isCorrect && index === selectedIndex) {
+      btn.classList.add('incorrect');
+    }
+  });
+}
+
+// Finish quiz (calculate and show score)
 function finishQuiz() {
-  questionContainer.textContent = 'Quiz complete! Scoring system coming in Week 3.';
-  optionsContainer.innerHTML = '';
+  const totalQuestions = module2Questions.length;
+  const passed = score >= passingScore;
+  const scoreMessage = `You scored ${score} / ${totalQuestions}`;
+  const feedbackMessage = passed
+    ? '✅ Nice work! You have a solid grasp on phishing defenses.'
+    : '❗ Review Lesson 1 & 2 and try again to strengthen your phishing defenses.';
+
+  questionContainer.textContent = 'Quiz complete! Here are your results:';
+  optionsContainer.innerHTML = `
+    <div class="quiz-results">
+      <p class="quiz-score">${scoreMessage}</p>
+      <p class="quiz-feedback">${feedbackMessage}</p>
+    </div>
+  `;
   nextButton.style.display = 'none';
   questionCounter.textContent = 'Done';
 }
